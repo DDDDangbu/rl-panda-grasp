@@ -1,0 +1,59 @@
+# TD3 + HER Configuration for Panda Pick-and-Place
+
+algorithm: td3
+seed: 42
+
+# Environment
+env:
+  reward_type: sparse
+  control_type: ee
+  max_episode_steps: 50
+  n_envs: 4
+
+# TD3 Hyperparameters
+learning_rate: 0.001
+buffer_size: 1000000
+batch_size: 256
+tau: 0.005
+gamma: 0.95
+learning_starts: 1000
+train_freq: 1
+gradient_steps: 1
+
+# TD3-specific
+policy_delay: 2
+target_policy_noise: 0.2
+target_noise_clip: 0.5
+action_noise:
+  type: normal
+  sigma: 0.1
+
+# Policy Network
+policy:
+  net_arch: [256, 256, 256]
+
+# Hindsight Experience Replay
+her:
+  n_sampled_goal: 4
+  strategy: future
+  online_sampling: true
+
+# Curriculum Learning
+curriculum:
+  enabled: true
+  initial_difficulty: 0.0
+  eval_freq: 10000
+  promotion_threshold: 0.6
+  demotion_threshold: 0.1
+  difficulty_step: 0.1
+  patience: 3
+
+# Training
+total_timesteps: 500000
+eval_freq: 5000
+n_eval_episodes: 20
+checkpoint_freq: 25000
+
+# Logging
+tensorboard_log: results/logs
+save_path: results/models
